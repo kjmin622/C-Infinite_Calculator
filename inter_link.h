@@ -1,0 +1,88 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef char DATA;
+
+struct linked_list {
+    DATA d;
+    struct linked_list *prev, *next;
+};
+
+typedef struct linked_list ELEMENT;
+typedef ELEMENT *LINK;
+
+
+LINK char_to_list(char);
+int count(LINK);
+LINK last_link(LINK);
+void concatenate(LINK, LINK);
+void insert(LINK, char);
+void del_link(LINK);
+
+
+LINK char_to_list(char s){
+    LINK head;
+    head = malloc(sizeof(ELEMENT));
+    head->d = s;
+    head->next = NULL;
+    head->prev = NULL;
+    return head;
+}
+
+int count(LINK head){
+    int cnt = 0;
+    for( ; head != NULL; head = head->next) cnt++;
+    return cnt;
+}
+
+LINK last_link(LINK head){
+    for( ; head->next != NULL; head = head->next);
+    return head;
+}
+
+void print_list(LINK head){
+    if(head == NULL) printf("NULL\n");
+    else {printf("%c --> ", head->d); print_list(head->next);}
+}
+
+void concatenate(LINK a, LINK b){
+    if(a->next == NULL){
+        a->next = b;
+        b->prev = a;
+    }
+    else{
+        concatenate(a->next,b);
+    }
+}
+
+void insert(LINK p1, char x){
+    LINK q = char_to_list(x);
+    if(p1->next == NULL){
+        p1->next = q;
+        q->prev = p1;
+    }
+    else{
+        q->next = p1->next;
+        p1->next->prev = q;
+        p1->next = q;
+        q->prev = p1;
+    }
+}
+
+void del_link(LINK p){
+    if(p->next == NULL){
+        p->prev->next = NULL;
+        free(p);
+    }
+    else{
+        p->prev->next = p->next;
+        p->next->prev = p->prev;
+        free(p);
+    }
+}
+
+void free_all(LINK h){
+    if(h == NULL) return;
+    free_all(h->next);
+    free(h);
+}
