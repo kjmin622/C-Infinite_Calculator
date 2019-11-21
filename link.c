@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <assert.h>
 
-typedef	char	DATA;
+typedef	char DATA;
 
 struct linked_list {
-	DATA *d;
+	DATA d;
 	struct linked_list *next;
 };
 
@@ -13,53 +13,42 @@ typedef	struct linked_list ELEMENT;
 typedef	ELEMENT *LINK;
 
 
-/////////////////////////////////////////////////////////
-//s라는 문자열로 생성된 linked list 반환
-LINK string_to_list(char s[]) {
+/* List creation using recursion. */
+LINK string_to_list(char s[])
+{
 	LINK head;
+
 	if (s[0] == '\0')	/* base case */
 		return NULL;
 	else {
 		head = malloc(sizeof(ELEMENT));
-		head->d = s;
-		head->next = NULL;
+		head->d = s[0];
+		head->next = string_to_list(s + 1);
 		return head;
 	}
 }
 
-
-////////////////////////////////////////////////////////
-//linked list의 길이 반환
+/* Count a list iteratively. */
 int count(LINK head)
 {
-	if (head == NULL)
-		return 0;
-	else
-		return (1 + count(head->next));
+	int cnt = 0;
+	for ( ; head != NULL; head = head->next)
+		cnt++;
+	return cnt;
 }
 
-////////////////////////////////////////////////////////
-//linked list의 값 출력
+/* Print a list recursively. */
 void print_list(LINK head)
 {
 	if (head == NULL)
 		printf("NULL");
 	else {
-		printf("%s --> ", head->d);
+		printf("%c --> ", head->d);
 		print_list(head->next);
 	}
 }
 
-////////////////////////////////////////////////////////
-//linked list의 인덱스 위치 문자열 반환
-char *index_find(LINK head, int index){
-    if(!index) return head->d;
-    else return index_find(head->next, index-1);
-}
-
-
-////////////////////////////////////////////////////////
-//a에 b를 연결
+/* Concatenate list a and b with a as head. */
 void concatenate(LINK a, LINK b)
 {
 	assert(a != NULL);
@@ -69,56 +58,65 @@ void concatenate(LINK a, LINK b)
 		concatenate(a->next, b);
 }
 
-///////////////////////////////////////////////////////
-//linked list의 index자리 다음에 q 인설트 ( -1 : 맨 앞, -2 : 맨 뒤)  헤드 반환
-LINK insert(LINK head, char *q, int index)
+/* Inserting an element in a linked list. */
+void insert(LINK p1, LINK p2, LINK q)
 {
-    if(index == -1){
-        LINK p1 = string_to_list(q);
-        p1->next = head;
-        return p1;
-    }
-
-    if(index == -2) index = count(head)-1;
-    LINK p1 = head;
-    while(index--){
-        p1 = p1->next;
-    }
-
-    if(p1->next == NULL){
-        LINK p2 = string_to_list(q);
-        p1->next = p2;
-    }
-    else{
-        LINK p3 = p1->next;
-        LINK p2 = string_to_list(q);
-        p1->next = p2;
-        p2->next = p3;
-    }
-    return head;
+	assert(p1->next == p2);
+	p1->next = q;
+	q->next = p2;
 }
 
-///////////////////////////////////////////////////////
-//linked list 삭제
-void delete(LINK head){
-    if(head == NULL) return;
-    else{
-        LINK next_head = head->next;
-        free(head);
-        delete(next_head);
-    }
+// p 다음꺼 delete
+void delete(LINK p){
+    LINK q = p->next;
+    if(p->next->next == NULL)
+        p->next = NULL;
+    else
+        p->next = p->next->next;
+    
+    free(q);
+}
+
+void free_all(LINK h){
+    LINK p = h->next;
+    free(h);
+    if(p != NULL) free_all(p);
+    else free(p);
 }
 
 int main()
 {
 	LINK h;
 	h = string_to_list("ABC");
-        h = insert(h,"fds",0);
-        h = insert(h,"abc",-1);
-        h = insert(h,"fcd",-2);
+        delete(h->next);
+	printf("The list h is\n");
+	print_list(h);
+	printf("\nThis list has %d elements.\n", count(h));
+
+	/* insert new LINK(X) between h and h->next */
+	insert(h, h->next, string_to_list("X"));
+	printf("The list h is(after insert 'X')\n");
+	print_list(h);
+
+
+	LINK a, b;
+	a = string_to_list("STAR");
+	b = string_to_list("BUCKS");
+	printf("\n\nThe list a is\n");
+	print_list(a);
+	printf("\nThe list b is\n");
+	print_list(b);
+
+	concatenate(a, b);
+	
+	printf("\nThe list a is(after concat)\n");
+	print_list(a);
+	printf("\nThe list b is(after concat)\n");
+	print_list(b);
+	printf("\n");
+
+        free_all(h);
         print_list(h);
-        printf("\n%s\n",index_find(h,1));
-        
-        delete(h);
+
 	return 0;
 }
