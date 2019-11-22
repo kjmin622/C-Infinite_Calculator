@@ -1,5 +1,3 @@
-#include<stdio.h>
-#include<stdlib.h>
 
 typedef char DATA;
 
@@ -10,14 +8,6 @@ struct linked_list {
 
 typedef struct linked_list ELEMENT;
 typedef ELEMENT *LINK;
-
-
-LINK char_to_list(char);
-int count(LINK);
-LINK last_link(LINK);
-void concatenate(LINK, LINK);
-void insert(LINK, char);
-void del_link(LINK);
 
 
 LINK char_to_list(char s){
@@ -41,8 +31,8 @@ LINK last_link(LINK head){
 }
 
 void print_list(LINK head){
-    if(head == NULL) printf("NULL\n");
-    else {printf("%c --> ", head->d); print_list(head->next);}
+    if(head == NULL) printf(" NULL\n");
+    else {printf("%c", head->d); print_list(head->next);}
 }
 
 void concatenate(LINK a, LINK b){
@@ -79,6 +69,17 @@ void del_link(LINK p){
         p->next->prev = p->prev;
         free(p);
     }
+}
+
+LINK copy_link(LINK p2){
+    LINK p1 = char_to_list(p2->d);
+    LINK p = p1;
+    p2 = p2->next;
+    for(; p2!=NULL; p2=p2->next){
+        insert(p,p2->d);
+        p = p->next;
+    }
+    return p1;
 }
 
 void free_all(LINK h){
