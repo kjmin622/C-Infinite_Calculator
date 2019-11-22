@@ -20,7 +20,6 @@ int IsEmpty(Stack *stack){
 void Push(Stack *stack, LINK head){
     Node *now= (Node*)malloc(sizeof(Node));
     now->data = head; 
-    //free_all(head);
     now->next = stack->top;
     stack->top = now;
 }
@@ -34,4 +33,8 @@ LINK Pop(Stack *stack){
 
     stack->top = now->next;
     return re;
+}
+
+LINK Top(Stack *stack){
+    return stack->top->data;
 }
