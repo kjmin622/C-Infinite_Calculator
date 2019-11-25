@@ -43,35 +43,7 @@ LINK multiple(LINK num1, LINK num2){
     for( ; num_copy->d != '.'; num_copy = num_copy->next); del_link(num_copy);
     num_copy = num2_int;
     for( ; num_copy->d != '.'; num_copy = num_copy->next); del_link(num_copy);
-    
-    // 쓸모없는 0 없애기
-    num_copy = num1_int->next;
-    while(1){
-        if(num_copy == NULL || num_copy->next == NULL || num_copy->d != '0') break;
-        save = num_copy->next;
-        del_link(num_copy);
-        num_copy = save;
-    }
-    num_copy = num2_int->next;
-    while(1){
-        if(num_copy == NULL || num_copy->next == NULL || num_copy->d != '0') break;
-        save = num_copy->next;
-        del_link(num_copy);
-        num_copy = save;
-    }
 
-    if(num1_int->d == '0' && num1_int->next != NULL){
-        num_copy = num1_int;
-        num1_int = num1_int->next;
-        num1_int->prev = NULL;
-        free(num_copy);
-    }
-    if(num2_int->d == '0' && num2_int->next != NULL){
-        num_copy = num2_int;
-        num2_int = num2_int->next;
-        num2_int->prev = NULL;
-        free(num_copy);
-    }
     // 계산/////////////////////////////////////////////////////////////////////
     // num2->d* num1->d .. 해서 계산 후 9보다 크거나 같으면 다음칸에 올림
     // num2->next->d* num1-> .. ...위에 계산 한 칸에 +
@@ -108,8 +80,7 @@ LINK multiple(LINK num1, LINK num2){
             }
             concatenate(zero_link,input);
             input = zero_link;
-        }
-        
+        } 
         //쓸모없는 0 지우기////////////////////////////////////////
         num_copy = last_link(input);
         while(1){
@@ -192,7 +163,9 @@ LINK multiple(LINK num1, LINK num2){
             insert(save,num_copy->d);
         }
     }
-    
+    zero_erase(ans);
+    free_all(num1);
+    free_all(num2);
     free_all(num1_int);
     free_all(num2_int);
     return ans;

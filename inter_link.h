@@ -35,6 +35,27 @@ void print_list(LINK head){
     else {printf("%c", head->d); print_list(head->next);}
 }
 
+void zero_erase(LINK head){
+    head = last_link(head);
+    for(; head->d!='.';){
+        if(head->d != '0') break;
+        
+        head->prev->next = NULL;
+        LINK store = head->prev;
+        free(head);
+        head = store;
+    }
+}
+
+void print_answer(LINK head){
+    for(; head!=NULL; head = head->next){
+        if(head->d == '+') continue;
+        if(head->d == '.' && head->next == NULL) break;
+        printf("%c",head->d);
+    }
+    printf("\n\n");
+}
+
 void concatenate(LINK a, LINK b){
     if(a->next == NULL){
         a->next = b;
