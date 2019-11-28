@@ -69,7 +69,6 @@ int main(void){
         int right_bracket = 0; // 우괄호
         if(!(exp->d == '(' || exp->d == '-' || (exp->d >= '0' && exp->d <= '9'))) errorcheck = -1;
         if(exp->d>='0' && exp->d <='9') number = 0;
-        if(exp->d == '(') left_bracket ++;
 
 
         //중간부분
@@ -108,7 +107,7 @@ int main(void){
             if(exp->d == ')') right_bracket++;
             if(exp->d >= '0' && exp->d<='9') number = 0;
         }
-        
+
         if(number) errorcheck = -1;
         if(left_bracket != right_bracket) errorcheck = -1;
 
