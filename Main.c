@@ -65,6 +65,7 @@ int main(void){
         exp = exp_head;
 
         int number = 1; // 숫자가 있으면 0
+        int spot = 0;
         int left_bracket = 0; // 왼괄호
         int right_bracket = 0; // 우괄호
         if(!(exp->d == '(' || exp->d == '-' || (exp->d >= '0' && exp->d <= '9'))) errorcheck = -1;
@@ -76,21 +77,31 @@ int main(void){
         while(exp->next != NULL){
             if(errorcheck == -1) break;
             
-            if(number && exp->d >= '0' && exp->d <= '9') number = 0;
+            if((exp->d >= '0' && exp->d <= '9') || exp->d == '.'){
+                number = 0;
+                if(!spot && exp->d == '.') spot = 1;
+                else if(spot && exp->d == '.') {errorcheck = -1; break;}
+            }
+            else spot = 0;
+
             if(exp->d == '(') left_bracket ++;
             if(exp->d == ')') right_bracket ++;
             if(left_bracket < right_bracket) {errorcheck = -1; break;}
+            
+        
 
             //나오면 안되는 문자
             if(!(exp->d == '+' || exp->d == '-' || exp->d == '/' || exp->d == '*' || 
-                        exp->d == '(' || exp->d == ')' || exp->d == '.' ||  (exp->d>='0'&&exp->d<='9'))) {errorcheck = -1; break;}
+                        exp->d == '(' || exp->d == ')' || exp->d == '.' ||  (exp->d>='0'&&exp->d<='9'))){errorcheck = -1; break;}
             
             //연산자 다음에 나오면 안되는 문자
             if(exp->d == '+' || exp->d == '/' || exp->d == '*' || exp->d == '-'){
                 if(!(exp->next->d == '(' || (exp->next->d>='0' && exp->next->d<='9'))) {errorcheck = -1; break;}
             }
+
             if(exp->d == '('){
-                if(!(exp->next->d == '-' || (exp->next->d>='0' && exp->next->d<='9'))) {errorcheck = -1; break;}
+                if(!(exp->next->d == '(' || exp->next->d == ')' || exp->next->d == '-' || 
+                            (exp->next->d>='0' && exp->next->d<='9'))) {errorcheck = -1; break;}
             }
             if(exp->d == ')'){
                 if(exp->next->d >= '0' && exp->next->d <='9') {errorcheck = -1; break;}
