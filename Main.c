@@ -19,10 +19,12 @@ int main(void){
         InitStack(&num_stack);
         InitStack(&oper_stack);
         printf("______________________________________\n식을 입력해주세요!!\n ->  ");
-        char input; scanf("%c",&input);
+        char input; scanf(" %c",&input);
 
+        
         LINK exp_head = char_to_list(input);
         LINK exp = exp_head;
+        LINK exp_x;
         ////////////////////////////////////////////////
         //입력부
         while(scanf("%c",&input)){
@@ -32,8 +34,93 @@ int main(void){
             p->prev = exp;
             exp = p;
         }
+        
         ////////////////////////////////////////////////
         printf("\n어디보자... ");
+        ////////////////////////////////////////////////
+        //오류 제거
+        //
+        //앞 공백 제거
+        exp = exp_head;
+        while(exp->next != NULL){
+            if(exp->d != ' ' && exp->d != '\n') break;
+            exp_x = exp->next;
+            exp->next->prev = NULL;
+            free(exp);
+            exp = exp_x;
+        }
+        exp_head = exp;
+        
+        //공백 제거
+        exp = exp_head->next;
+        while(exp!=NULL){
+            if(exp->d == ' ' || exp->d == '\n'){
+                exp_x = exp->prev;
+                del_link(exp);
+                exp = exp_x;
+            }
+            exp = exp->next;
+        }
+        //맨 앞 글자
+        exp = exp_head;
+
+        int number = 1; // 숫자가 있으면 0
+        int left_bracket = 0; // 왼괄호
+        int right_bracket = 0; // 우괄호
+        if(!(exp->d == '(' || exp->d == '-' || (exp->d >= '0' && exp->d <= '9'))) errorcheck = -1;
+        if(exp->d>='0' && exp->d <='9') number = 0;
+        if(exp->d == '(') left_bracket ++;
+
+
+        //중간부분
+        exp = exp_head;
+        while(exp->next != NULL){
+            if(errorcheck == -1) break;
+            
+            if(number && exp->d >= '0' && exp->d <= '9') number = 0;
+            if(exp->d == '(') left_bracket ++;
+            if(exp->d == ')') right_bracket ++;
+            if(left_bracket < right_bracket) {errorcheck = -1; break;}
+
+            //나오면 안되는 문자
+            if(!(exp->d == '+' || exp->d == '-' || exp->d == '/' || exp->d == '*' || 
+                        exp->d == '(' || exp->d == ')' || exp->d == '.' ||  (exp->d>='0'&&exp->d<='9'))) {errorcheck = -1; break;}
+            
+            //연산자 다음에 나오면 안되는 문자
+            if(exp->d == '+' || exp->d == '/' || exp->d == '*' || exp->d == '-'){
+                if(!(exp->next->d == '(' || (exp->next->d>='0' && exp->next->d<='9'))) {errorcheck = -1; break;}
+            }
+            if(exp->d == '('){
+                if(!(exp->next->d == '-' || (exp->next->d>='0' && exp->next->d<='9'))) {errorcheck = -1; break;}
+            }
+            if(exp->d == ')'){
+                if(exp->next->d >= '0' && exp->next->d <='9') {errorcheck = -1; break;}
+            }
+        
+            exp = exp->next;
+        }
+
+        if(exp->prev != NULL){
+            if(!(exp->d == '+' || exp->d == '-' || exp->d == '/' || exp->d == '*' || 
+                        exp->d == '(' || exp->d == ')' || (exp->d>='0'&&exp->d<='9'))) errorcheck = -1;
+
+            if(!(exp->d == ')' || (exp->d >= '0' && exp->d <= '9'))) errorcheck = -1;
+            if(exp->d == ')') right_bracket++;
+            if(exp->d >= '0' && exp->d<='9') number = 0;
+        }
+        
+        if(number) errorcheck = -1;
+        if(left_bracket != right_bracket) errorcheck = -1;
+
+
+        if(errorcheck == -1) {printf("어라.. 식이 이상한 거 같은데요?\n\n"); free_all(exp_head); continue;}
+        if(errorcheck == -301) printf("음.. 연산자가 없는거 같기도 하고..");
+        if(errorcheck == 0) printf("일단 저걸 더해야 하고..");
+        if(errorcheck ==1) printf("저것들은 빼야 할 거 같고..");
+        if(errorcheck ==2) printf("얘네는 이렇게 이렇게 곱하고 더해서..");
+        if(errorcheck ==3) printf("저걸 저걸로 잘 나눠주면...");
+        if(errorcheck ==4) printf("저건 묶어서 생각하고...");
+        ////////////////////////////////////////////////
         //수정부
         if(exp_head->next != NULL && exp_head->d == '-'){ //맨 앞 - 나오는 경우
             LINK minus = char_to_list('0');
@@ -65,6 +152,7 @@ int main(void){
                     else situration = 0;
                 }
             }
+            if(exp->next != NULL && exp->d == ')' && exp->next->d == '(') insert(exp,'*');
             else if(exp->d == '('){
                 if(exp->next!=NULL && exp->next->d == '-'){ // -(1+2)  ->  0-(1+2)
                     insert(exp,'0');
@@ -76,71 +164,8 @@ int main(void){
         if(situration == 0 && exp->d>='0' && exp->d<='9'){
             insert(exp,'.');
         }
- 
-        //에러체크겸 귀여운 텍스트를 만들어보자/////////////////////////////////////////////////////
 
-        exp = exp_head;
-        int left_bracket = 0;
-        int right_bracket = 0;
-        for(; exp!=NULL; exp=exp->next){
-            if(errorcheck == -1) break;
-            if(!((exp->d<='9' && exp->d>='0') || exp->d=='+' || exp->d=='-' || exp->d=='*' || exp->d=='/' 
-                        || exp->d=='(' || exp->d==')' || exp->d==' ' || exp->d=='.')){
-                errorcheck = -1; break;
-            }
-
-            if(exp->next != NULL){
-                if(exp->d=='+' || exp->d=='-' || exp->d=='*' || exp->d=='/'){
-                    if(exp->next->d=='+' || exp->next->d=='-' || exp->next->d=='*' || exp->next->d=='/'){
-                        errorcheck = -1; break;
-                    }
-                }
-            }
-            
-            if(exp->d == '/'){
-                LINK divi_check;
-                if(exp->next != NULL) divi_check = exp->next;
-                int divi_bool = 1;
-                for(; divi_check != NULL && divi_check->d != '+' && divi_check->d != '-' && divi_check->d != '*'
-                        && divi_check->d != '/' && divi_check->d != '(' && divi_check->d != ')' ; divi_check = divi_check->next){
-                    if(divi_check->d >= '1' && divi_check->d <= '9'){
-                        divi_bool = 0; break;
-                    }
-                }
-                if(divi_bool){
-                    errorcheck = -1;
-                    break;
-                }
-            }
-
-
-            if(exp->d == '(') left_bracket++;
-            if(exp->d == ')') right_bracket++;
-
-            if(errorcheck==-301 && exp->d == '+') errorcheck = 0;
-            if(errorcheck<1 && exp->d == '-') errorcheck = 1;
-            if(errorcheck<2 && exp->d == '*') errorcheck =2;
-            if(errorcheck<3 && exp->d == '/') errorcheck = 3;
-            if(errorcheck<4 && exp->d == '(') errorcheck = 4;
-        }
-        
-        if(left_bracket != right_bracket) errorcheck = -1;
-
-        if(errorcheck == -1){
-            printf("어라..? 식이 이상한 것 같은데요..??\n\n");
-            free_all(exp_head);
-            continue;
-        }
-
-
-
-        if(errorcheck == -301) printf("음.. 연산자가 없는거 같기도 하고..");
-        if(errorcheck == 0) printf("일단 저걸 더해야 하고..");
-        if(errorcheck ==1) printf("저것들은 빼야 할 거 같고..");
-        if(errorcheck ==2) printf("얘네는 이렇게 이렇게 곱하고 더해서..");
-        if(errorcheck ==3) printf("저걸 저걸로 잘 나눠주면...");
-        if(errorcheck ==4) printf("저건 묶어서 생각하고...");
-        
+        ////////////////////////////////////////////////
 
         printf(" 계산하면... ");
         ////////////////////////////////////////////////
