@@ -1,33 +1,36 @@
 #include <stdio.h>
 #include "inter_link.h"
+#include <stdbool.h>
 	
-void sub(LINK a, LINK b){               // subtract for only one node. return the answer
+bool sub(LINK a, LINK b, bool is_it_first){//subtract eachnumber in same digit 
 
     int a_tmp, b_tmp;
-    if(a->prev != NULL && b->prev != NULL){
-        a_tmp = a->d - '0';
-        b_tmp = b->d - '0';
+    if(a->d == '.') sub(a->prev, b->prev, is_it_first);
+    else if((a->prev != NULL) && (a->d != '.')){
+        int a_tmp = a->d - '0';
+        int b_tmp = b->d - '0';
 
         a_tmp = a_tmp - b_tmp;
 
-        if(a_tmp < 0){
-            a->prev->d = ((a->prev->d - '0') -1) + '0';
-            a_tmp += 10;
+        if(a_tmp <= 0){
+            a_tmp += desending(is_it_first);
+            is_it_first = false;
+
+        }else if(a_tmp > 0 && is_it_first == false){
+            a_tmp--;
+            is_it_first = true;
         }
 
         a->d = a_tmp + '0';
         b->d = b_tmp + '0';
-        sub(a->prev, b->prev);
-    }    
-}
-
+        sub(a->prev, b->prev, is_it_first);
+    }else return is_it_first;
 
 LINK sep(LINK head){					//seperate interger, point and decimel. also return decimals. 
 	LINK new;
     for( ; head != NULL; head = head->next){
 		if(head->d == '.'){
             new = head->next;
-            head = head->prev;
 			head->next = NULL;
             break;
         }
@@ -92,21 +95,17 @@ int desending(bool hm){		//when a < b in single node, use this for desending num
     else return 9;
 }
 
-
 void subtract(LINK a, LINK b){      // IF YOU WANNA SUBTRACT B FRO    M A, USE THIS FUNCTION. 
     bool mark;						// record + or -
     if(a->d == '+' && b->d == '+') mark = true; 
     else if(a->d == '-' && b->d == '-') mark = false;
 
     int cnt_point = fill_zero(a, b);//make same digit with zero.
-    int cnt = count(a);				//length of number, use this for make complement calculation.
 
     for( ; a->next != NULL; a = a->next);	//move pointer to last link.
     for( ; b->next != NULL; b = b->next);
 
     bool is_it_first = sub(a, b, true);		//'is it first' is use for make + or -
-
-    printf("%s\n", is_it_first ? "true" : "false");
 
     a = roll_back(a);printf("\n"); 			//move pointer to first link
     b = roll_back(b);printf("\n"); 
@@ -115,12 +114,15 @@ void subtract(LINK a, LINK b){      // IF YOU WANNA SUBTRACT B FRO    M A, USE T
     else{
         a->d = '-';							//when a < b, complement calculation 
         if(is_it_first == false){
-            int cnt = count(a);
+            int cnt = count(a);             //length of number, use this for make complement calculation.
+
 
             LINK cmp = char_to_list('-');	
             for(int i= 0; i < cnt; i++){
                 LINK tmp;
                 if(i == 0) tmp = char_to_list('1');
+				else if(i == cnt_point - 1) tmp = char_to_list('.');
+
                 else tmp = char_to_list('0');
                 concatenate(cmp, tmp);
             }
@@ -138,5 +140,17 @@ void subtract(LINK a, LINK b){      // IF YOU WANNA SUBTRACT B FRO    M A, USE T
             a->next->prev = a;
 
         }
+    }
+
+    for( ; a->d == '-' || a->d == '+';){	//delete zero in front
+        if(a->next->d == '0'){
+            a->next = a->next->next;
+            a->next->prev = a;
+        }else break;
+    }
+
+    for( ; a->next != NULL; a = a->next);	//delete zero in back
+    for( ; a->d =='0'; a = a->prev){
+            a->prev->next = NULL;
     }
 }
