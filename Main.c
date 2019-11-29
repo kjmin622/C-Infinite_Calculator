@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <math.h>
 #include "inter_link.h"
 #include "stack.h"
 #include "multiple.h"
-#include "sub.h"
+#include "minus.h"
 
 LINK calculator(LINK,LINK,char);
 
@@ -273,12 +275,15 @@ int main(void){
 LINK calculator(LINK p1, LINK p2, char oper){
     LINK p3;
     if(oper == '+' || oper=='-'){
+        if(oper == '-'){
+            p2->d = (p2->d == '-' ? '+' : '-');
+        }
         if(p1->d + p2->d == '+'+'+' || p1->d + p2->d == '-'+'-'){p3 = copy_link(p1);}// plus(p1,p2);   //부호가 같을 시 플러스
-        else {p3 = subtract(p1,p2);}   // 부호가 다를 시 마이너스
+        else {p3 = minus(p1,p2);}   // 부호가 다를 시 마이너스
     }
 
-    if(oper == '*') {p3 = multiple(p1,p2);}// multiple(p1,p2); //곱하기 만들어야 함
+    if(oper == '*') {p3 = multiple(p1,p2);}
     if(oper == '/') {p3 = copy_link(p1);}// division(p1,p2); //나누기 만들어야 함
-    
+
     return p3;
 }
