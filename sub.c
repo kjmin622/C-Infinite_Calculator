@@ -153,5 +153,6 @@ LINK subtract(LINK a, LINK b){      // IF YOU WANNA SUBTRACT B FROM A, USE THIS 
     for( ; a->d =='0'; a = a->prev){
             a->prev->next = NULL;
     }
+	a = roll_back(a);
 	return a;
 }
