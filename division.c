@@ -2,110 +2,72 @@
 #include<stdlib.h>
 #include "inter_link.h"
 
-LINK division(LINK, LINK);
-int division_compare(LINK, LINK);
+LINK division(LINK a, LINK b){  // a//b
+    //선언부////////////////////////////////////////////////////
+    int comp;
+    int buho; // +이면 1, -이면 0:
 
-
-int division_compare(LINK a, LINK b){  // 둘 다 양수이고 소수부가 없을 때를 가정  a>=b: 1  /  a<b : 2
-    int alen = count(a);
-    int blen = count(b);
-    if(alen>blen) return 1;
-    if(blen>alen) return 2;
-    ////////////////////////////길이가 같을 때
-
-    for(; a != NULL; a = a->next){
-        if(a->d > b->d) return 1;
-        if(b->d > a->d) return 2;
-        b= b->next;
-    }
-    return 1;
-}
-
-LINK division(LINK a, LINK b){  // a/b
-    //선언부/////////////////////////////////////////////////////////////
-    int buho=0;  // 1->'+' , 2->'-'
-    int alen = 0;
-    int blen = 0;
-    LINK num_copy;
     LINK num1;
     LINK num2;
-    LINK where1;
-    LINK where2;
-    LINK mod;
+    LINK num3;
+    LINK num0;
 
-    //부호 계산//////////////////////////////////////////////////////////
-    if(a->d == b->d) buho=1;
-    /////////////////////////////////////////////////////////////////////
-    
 
-    //부호 없애기////////////////////////////////////////////////////////
-    num_copy = a;
-    a = a->next;
-    a->prev = NULL;
-    free(num_copy);
-
-    num_copy = b;
-    b = b->next;
-    b->prev = NULL;
-    free(num_copy);
-    ////////////////////////////////////////////////////////////////////
-    //print_list(a);
-    //print_list(b);
-   
-    //소수점 없애고 소수 아래 자리 세기//////// /////////////////////////
-    num_copy = a;
-    for(; num_copy->d != '.'; num_copy = num_copy->next);
-    num1 = num_copy;
-    del_link(num_copy);
-    
-    num_copy = b;
-    for(; num_copy->d != '.'; num_copy = num_copy->next);
-    num2 = num_copy;
-    del_link(num_copy);
-    ////////////////////////////////////////////////////////////////////
-    //print_list(a);
-    //print_list(b);
-
-    //소수 아래 자리 맞추기///////////////////////////////////////////
-    while(num1->next!=NULL || num2->next!=NULL){        
-        if(num1->next == NULL) insert(num1,'0');
-        if(num2->next == NULL) insert(num2,'0');
-
-        num1 = num1->next;
-        num2 = num2->next;
+    //b가 0인지 확인////////////////////////////////////////////
+    if(b->next->d=='0' && b->next->next->d=='.') {
+        free_all(a); free_all(b);
+        return char_to_list('e');   //에러 반환
     }
-    ///////////////////////////////////////////////////////////////////
-    //print_list(a);
-    //print_list(b);
-    
-    //나눠봅시다///////////////////////////////////////////////////////
-    // num1 / num2
-    num1 = char_to_list(a->d);
-    where1 = num1;
-    where2 = a->next;
-    num2 = copy_link(b);
-    num_copy = num2;
-    
-    if(division_compare(a,b)==1){   //a가 b보다 클 때
-        for(; num_copy->next!=NULL; num_copy=num_copy->next){
-            insert(where1,where2->d);
-            where1 = where1->next;
-            where2 = where2->next;
-        }
-        if(division_compare(num1,num2)==2){
-            insert(where1,where2->d);
-            where1 = where1->next;
-            where2 = where2->next;
-        }
+
+    //a보다 b가 더 큰지 확인////////////////////////////////////
+    comp = compare(a,b);
+    if(comp == 2){
+        LINK ans = char_to_list('+'); insert(ans,'.'); insert(ans,'0');
+        free_all(a); free_all(b);
+        return ans;   //b가 더 크면 0 반환
     }
-    else{  //b가 a보다 클 때
-        free_all(a); free_all(b); free_all(num1); free_all(num2);
-        num1 = char_to_list('+');
-        insert(num1, '.');
-        insert(num1, '0');
-        return num1;
+
+    //부호 연산 및 부호 제거////////////////////////////////////
+    buho = a->d == b->d ? 1 : 0;
+
+    if(comp == 3){
+        LINK ans = char_to_list(buho?'+':'-'); insert(ans,'.'); insert(ans,'1');
+        free_all(a); free_all(b);
+        return ans;  //a와 b가 같으면 부호에 따른 1 반환
     }
-        
+
+    num1 = a->next; num2 = b->next;
+    free(a); free(b);
+
+    //소수점 제거///////////////////////////////////////////////
+    Downzero_fill(num1,num2);
+    a=num1; for(; a->d != '.'; a=a->next); del_link(a);
+    a=num2; for(; a->d != '.'; a=a->next); del_link(a);
+
+    //num0 생성////////////////////////////////////////////////
+    num0 = char_to_list(num1->d);
+    a = num2->next;
+    b = num0;
+    num3 = num1->next;
+    for(; a!=NULL; a=a->next){
+        insert(b,num3->d);
+        b = b->next;             // num0의 현재 읽기 위치
+        num3 = num3->next;       // num1의 불러오기 위치
+    }
+    
+    if(num0->d < num2->d || compare(num0, num2)==2){
+        insert(b,num3->d);
+        b = b->next;
+        num3 = num3->next;
+    }
+
+    //계산//////////////////////////////////////////////////////
+
+
+    //다듬기////////////////////////////////////////////////////
+
+
+    return num1;
 }
 
 
