@@ -69,6 +69,14 @@ LINK division(LINK a, LINK b){  // a//b
 
     while(1){
         int input = 0;
+        
+        while(num0->next != NULL && num0->d=='0'){
+            a=num0->next;
+            a->prev = NULL;
+            free(num0);
+            num0 = a;
+        }
+
         while(division_compare(num0,num2) != 2){ 
             input ++;
             num0 = division_minus(num0,num2);
