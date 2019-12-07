@@ -20,7 +20,7 @@ int main(void){
 
         ////////////////////////////////////////////////
         //선언부
-        int errorcheck=-301; // 0: +  1: -  2: *  3: /  5: ()  / -301: 연산자 없음 /  -1: error
+        char errorcheck=-31; // 0: +  1: -  2: *  3: /  5: ()  / -31: 연산자 없음 /  -1: error
         Stack num_stack, oper_stack;
         InitStack(&num_stack);
         InitStack(&oper_stack);
@@ -140,7 +140,7 @@ int main(void){
             if(errorcheck < 4 && exp->d == ')') errorcheck = 4;
         }
 
-        if(errorcheck == -301) printf("음.. 연산자가 없는거 같기도 하고..");
+        if(errorcheck == -31) printf("음.. 연산자가 없는거 같기도 하고..");
         if(errorcheck == 0) printf("일단 저걸 더해야 하고..");
         if(errorcheck ==1) printf("저것들은 빼야 할 거 같고..");
         if(errorcheck ==2) printf("얘네는 이렇게 이렇게 곱하고 더해서..");
