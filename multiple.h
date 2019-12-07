@@ -45,7 +45,7 @@ LINK multiple(LINK num1, LINK num2){
     for( ; num_copy->d != '.'; num_copy = num_copy->next); del_link(num_copy);
 
     // 계산/////////////////////////////////////////////////////////////////////
-    // num2->d* num1->d .. 해서 계산 후 9보다 크거나 같으면 다음칸에 올림
+    // num2->d* num1->d .. 해서 계산 후 9보다 크면 다음칸에 올림
     // num2->next->d* num1-> .. ...위에 계산 한 칸에 +
     // 
     mul1 = last_link(num1_int);
