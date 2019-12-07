@@ -7,14 +7,14 @@
 #include "multiple.h"
 #include "minus.h"
 #include "plus.h"
-
+#include "division.h"
 
 LINK calculator(LINK,LINK,char);
 void print_help();
 
 
 int main(void){
-    printf("물어볼 게 있으시면 w를 입력해주세요!\n");
+    printf("\n______________________________________\n\n물어볼 게 있으시면 w를 입력해주세요!\n");
     printf("계산기를 종료하고 싶으시면 q를 입력해주세요!\n");
     while(1){
 
@@ -369,8 +369,8 @@ LINK calculator(LINK p1, LINK p2, char oper){
     }
 
     if(oper == '*') {p3 = multiple(p1,p2);}
-    if(oper == '/') {p3 = copy_link(p1);}// division(p1,p2); //나누기 만들어야 함
-
+    if(oper == '/') {p3 = division(p1,p2);}
+    
     return p3;
 }
 
@@ -393,7 +393,7 @@ void print_help(){
 + : 더하기\n\
 - : 빼기\n\
 * : 곱하기\n\
-/ : 몫\n\
+/ : 몫(0으로 나눌 시, 0을 반환합니다)\n\
 ( : 좌괄호\n\
 ) : 우괄호\n\
 및 소수점을 포함한 숫자\n\
