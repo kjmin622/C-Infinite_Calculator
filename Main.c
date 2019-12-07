@@ -113,6 +113,14 @@ int main(void){
                 if(exp->next->d >= '0' && exp->next->d <='9') {errorcheck = -1; break;}
             }
             exp = exp->next;
+            
+            if(errorcheck != -1){
+                if(errorcheck < 0 && exp->d == '+') errorcheck = 0;
+                if(errorcheck < 1 && exp->d == '-') errorcheck = 1;
+                if(errorcheck < 2 && exp->d == '*') errorcheck = 2;
+                if(errorcheck < 3 && exp->d == '/') errorcheck = 3;
+                if(errorcheck < 4 && exp->d == ')') errorcheck = 4;
+            }
         }
 
         if(exp->prev != NULL){
@@ -132,13 +140,7 @@ int main(void){
 
         exp = exp_head->next;
 
-        for(; exp != NULL; exp = exp->next){
-            if(errorcheck < 0 && exp->d == '+') errorcheck = 0;
-            if(errorcheck < 1 && exp->d == '-') errorcheck = 1;
-            if(errorcheck < 2 && exp->d == '*') errorcheck = 2;
-            if(errorcheck < 3 && exp->d == '/') errorcheck = 3;
-            if(errorcheck < 4 && exp->d == ')') errorcheck = 4;
-        }
+        
 
         if(errorcheck == -31) printf("음.. 연산자가 없는거 같기도 하고..");
         if(errorcheck == 0) printf("일단 저걸 더해야 하고..");
