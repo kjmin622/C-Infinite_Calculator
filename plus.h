@@ -1,5 +1,5 @@
 
-LINK minus(LINK a, LINK b){
+LINK plus(LINK a, LINK b){
     
     /////////////////////////////////////////////////////////////
     //선언부
@@ -11,25 +11,8 @@ LINK minus(LINK a, LINK b){
     int big_num;
     int point_count = 0;
     int now = 0;
-    int down = 0;
+    int up = 0;
 
-    /////////////////////////////////////////////////////////////
-    //절대값이 큰 수가 a로 가도록 및 혹시 답이 0이니?
-    big_num = compare(a,b);
-
-    if(big_num == 3){ // 둘의 절대값이 같을 때
-        ans = char_to_list('+');
-        insert(ans,'.');
-        insert(ans,'0');
-        free_all(a); free_all(b);
-        return ans;
-    }
-    
-    if(big_num == 2){ // b가 더 크면 b가 a로 이동
-        num_copy = a;
-        a = b;
-        b = num_copy;
-    }
     /////////////////////////////////////////////////////////////
     //부호는 a의 부호를 따라가도록
     buho = a->d == '+' ? 1 : 0;  // +면 1, -면 0
@@ -44,6 +27,11 @@ LINK minus(LINK a, LINK b){
     num2 = Upzero_fill(num1,num2);
 
     ////////////////////////////////////////////////////////////
+    //올림 대비 0 한개씩 더 추가
+    a = num1; num1 = char_to_list('0'); concatenate(num1, a);
+    a = num2; num2 = char_to_list('0'); concatenate(num2, a);
+
+    ////////////////////////////////////////////////////////////
     //소수점 아래 맞추기
     Downzero_fill(num1,num2);
 
@@ -54,6 +42,7 @@ LINK minus(LINK a, LINK b){
     for(; a->d != '.'; a=a->prev) point_count++; del_link(a);
     for(; b->d != '.'; b=b->next); del_link(b);
 
+
     ///////////////////////////////////////////////////////////
     //계산
     a = last_link(num1);
@@ -62,16 +51,17 @@ LINK minus(LINK a, LINK b){
     while(a!=NULL){
         int number1 = a->d-'0';
         int number2 = b->d-'0';
-        int check = 0;
-        if(number2-down > number1) {number1 += 10; check = 1;};
-        now = number1 - number2 + down;
-        down = check ? -1 : 0;
-        a->d = now + '0';
+
+        now = number1 + number2 + up;
+        
+        up = now/10;
+        a->d = now%10 + '0';
         a = a->prev;
         b = b->prev;
     }
     
     ans = copy_link(num1);
+
     free_all(num1); free_all(num2);
     ////////////////////////////////////////////////////////////
     //점 붙이기

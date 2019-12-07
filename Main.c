@@ -6,6 +6,8 @@
 #include "stack.h"
 #include "multiple.h"
 #include "minus.h"
+#include "plus.h"
+
 
 LINK calculator(LINK,LINK,char);
 
@@ -278,7 +280,7 @@ LINK calculator(LINK p1, LINK p2, char oper){
         if(oper == '-'){
             p2->d = (p2->d == '-' ? '+' : '-');
         }
-        if(p1->d + p2->d == '+'+'+' || p1->d + p2->d == '-'+'-'){p3 = copy_link(p1);}// plus(p1,p2);   //부호가 같을 시 플러스
+        if(p1->d + p2->d == '+'+'+' || p1->d + p2->d == '-'+'-'){p3 = plus(p1,p2);}   //부호가 같을 시 플러스
         else {p3 = minus(p1,p2);}   // 부호가 다를 시 마이너스
     }
 

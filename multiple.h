@@ -1,13 +1,3 @@
-/*
-#include <stdio.h>
-#include <stdlib.h>
-#include "inter_link.h"
-#include "stack.h"
-*/
-
-// 0 1 2 3 4 5 6 7 8
-// + 1 3 5 . 3 2 1
-// - 5 . 2 1 7 9
 
 LINK multiple(LINK num1, LINK num2){
     // 계산 값 
@@ -170,35 +160,3 @@ LINK multiple(LINK num1, LINK num2){
     free_all(num2_int);
     return ans;
 }
-
-/*
-
-int main(){
-    LINK a1, a2;
-    char input;
-
-    while(1){
-
-    scanf(" %c",&input);
-    a1 = char_to_list(input);
-    LINK a_input = a1;
-    while(scanf("%c",&input)){
-        if(input == '\n') break;
-        insert(a_input,input);
-        a_input = a_input->next;
-    }
-
-    scanf(" %c",&input);
-    a2 = char_to_list(input);
-    a_input = a2;
-    while(scanf("%c",&input)){
-        if(input == '\n') break;
-        insert(a_input,input);
-        a_input = a_input->next;
-    }
-    
-    LINK a3 = multiple(a1,a2);
-    print_list(a3);
-    }
-}
-*/
