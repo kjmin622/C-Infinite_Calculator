@@ -138,8 +138,6 @@ int main(void){
 
         if(errorcheck == -1) {printf("어라.. 식이 이상한 거 같은데요?\n\n"); free_all(exp_head); continue;}
 
-        exp = exp_head->next;
-
         
 
         if(errorcheck == -31) printf("음.. 연산자가 없는거 같기도 하고..");
