@@ -95,7 +95,7 @@ int desending(bool hm){		//when a < b in single node, use this for desending num
     else return 9;
 }
 
-void subtract(LINK a, LINK b){      // IF YOU WANNA SUBTRACT B FRO    M A, USE THIS FUNCTION. 
+LINK subtract(LINK a, LINK b){      // IF YOU WANNA SUBTRACT B FROM A, USE THIS FUNCTION. 
     bool mark;						// record + or -
     if(a->d == '+' && b->d == '+') mark = true; 
     else if(a->d == '-' && b->d == '-') mark = false;
@@ -153,4 +153,6 @@ void subtract(LINK a, LINK b){      // IF YOU WANNA SUBTRACT B FRO    M A, USE T
     for( ; a->d =='0'; a = a->prev){
             a->prev->next = NULL;
     }
+	a = roll_back(a);
+	return a;
 }

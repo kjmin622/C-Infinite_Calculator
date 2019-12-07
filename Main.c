@@ -1,8 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <math.h>
 #include "inter_link.h"
 #include "stack.h"
 #include "multiple.h"
+#include "minus.h"
+#include "plus.h"
+
+
 LINK calculator(LINK,LINK,char);
 
 
@@ -14,7 +20,7 @@ int main(void){
 
         ////////////////////////////////////////////////
         //선언부
-        int errorcheck=-301; // 0: +  1: -  2: *  3: /  5: ()  / -301: 연산자 없음 /  -1: error
+        char errorcheck=-31; // 0: +  1: -  2: *  3: /  5: ()  / -31: 연산자 없음 /  -1: error
         Stack num_stack, oper_stack;
         InitStack(&num_stack);
         InitStack(&oper_stack);
@@ -106,8 +112,15 @@ int main(void){
             if(exp->d == ')'){
                 if(exp->next->d >= '0' && exp->next->d <='9') {errorcheck = -1; break;}
             }
-        
             exp = exp->next;
+            
+            if(errorcheck != -1){
+                if(errorcheck < 0 && exp->d == '+') errorcheck = 0;
+                if(errorcheck < 1 && exp->d == '-') errorcheck = 1;
+                if(errorcheck < 2 && exp->d == '*') errorcheck = 2;
+                if(errorcheck < 3 && exp->d == '/') errorcheck = 3;
+                if(errorcheck < 4 && exp->d == ')') errorcheck = 4;
+            }
         }
 
         if(exp->prev != NULL){
@@ -124,7 +137,10 @@ int main(void){
 
 
         if(errorcheck == -1) {printf("어라.. 식이 이상한 거 같은데요?\n\n"); free_all(exp_head); continue;}
-        if(errorcheck == -301) printf("음.. 연산자가 없는거 같기도 하고..");
+
+        
+
+        if(errorcheck == -31) printf("음.. 연산자가 없는거 같기도 하고..");
         if(errorcheck == 0) printf("일단 저걸 더해야 하고..");
         if(errorcheck ==1) printf("저것들은 빼야 할 거 같고..");
         if(errorcheck ==2) printf("얘네는 이렇게 이렇게 곱하고 더해서..");
@@ -261,12 +277,15 @@ int main(void){
 LINK calculator(LINK p1, LINK p2, char oper){
     LINK p3;
     if(oper == '+' || oper=='-'){
-        if(p1->d + p2->d == '+'+'+' || p1->d + p2->d == '-'+'-'){p3 = copy_link(p1);}// plus(p1,p2);   //부호가 같을 시 플러스
-        else {p3 = copy_link(p1);}// minus(p1,p2); // 부호가 다를 시 마이너스
+        if(oper == '-'){
+            p2->d = (p2->d == '-' ? '+' : '-');
+        }
+        if(p1->d + p2->d == '+'+'+' || p1->d + p2->d == '-'+'-'){p3 = plus(p1,p2);}   //부호가 같을 시 플러스
+        else {p3 = minus(p1,p2);}   // 부호가 다를 시 마이너스
     }
 
-    if(oper == '*') {p3 = multiple(p1,p2);}// multiple(p1,p2); //곱하기 만들어야 함
+    if(oper == '*') {p3 = multiple(p1,p2);}
     if(oper == '/') {p3 = copy_link(p1);}// division(p1,p2); //나누기 만들어야 함
-    
+
     return p3;
 }
