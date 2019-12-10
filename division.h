@@ -1,11 +1,11 @@
 
 LINK division_minus(LINK, LINK);
-int division_compare(LINK, LINK);
+char division_compare(LINK, LINK);
 
 LINK division(LINK a, LINK b){  // a//b
     //선언부////////////////////////////////////////////////////
-    int comp;
-    int buho; // +이면 1, -이면 0:
+    char comp; // 비교를 받아오자
+    char buho; // +이면 1, -이면 0:
 
     LINK num1;
     LINK num2;
@@ -16,9 +16,8 @@ LINK division(LINK a, LINK b){  // a//b
     
     //b가 0인지 확인////////////////////////////////////////////
     if(b->next->d=='0' && b->next->next->d=='.') {
-        LINK ans = char_to_list('+'); insert(ans,'.'); insert(ans,'0');
         free_all(a); free_all(b);
-        return ans;  //b가 0이면 0 반환
+        return char_to_list('e');  //b가 0이면 에러 반환
     }
 
     //a보다 b가 더 큰지 확인////////////////////////////////////
@@ -112,14 +111,14 @@ LINK division(LINK a, LINK b){  // a//b
 }
 
 LINK division_minus(LINK a, LINK b){
-    int alen = count(a);
-    int blen = count(b);
-    int len = alen-blen;
+    unsigned long long alen = count(a);
+    unsigned long long blen = count(b);
+    unsigned long long len = alen-blen;
 
     if(len != 0){
         LINK zero = char_to_list('0');
         len --;
-        for(int i=0; i<len; i++){
+        while(len--){
             insert(zero,'0');
         }
         concatenate(zero,b);
@@ -128,11 +127,11 @@ LINK division_minus(LINK a, LINK b){
     LINK x = last_link(a);
     LINK y = last_link(b);
     
-    int now; int down = 0;
+    char now; char down = 0;
     
     while(x!=NULL){
-        int num1 = x->d -'0';
-        int num2 = y->d -'0';
+        char num1 = x->d -'0';
+        char num2 = y->d -'0';
         now = num1 - num2 - down;
         down = 0;
         if(now < 0) {now += 10; down = 1;}
@@ -151,10 +150,10 @@ LINK division_minus(LINK a, LINK b){
     return a;
 }
 
-int division_compare(LINK a, LINK b){
+char division_compare(LINK a, LINK b){
     
-    int alen = count(a);
-    int blen = count(b);
+    unsigned long long alen = count(a);
+    unsigned long long blen = count(b);
     if(alen > blen) return 1;
     if(alen < blen) return 2;
 
@@ -170,32 +169,4 @@ int division_compare(LINK a, LINK b){
 }
 
 
-/*
-//테스트
-int main(){
-    LINK a1, a2;
-    char input;
 
-    while(1){
-
-    scanf(" %c",&input);
-    a1 = char_to_list(input);
-    LINK a_input = a1;
-    while(scanf("%c",&input)){
-        if(input == '\n') break;
-        insert(a_input,input);
-        a_input = a_input->next;
-    }
-
-    scanf(" %c",&input);
-    a2 = char_to_list(input);
-    a_input = a2;
-    while(scanf("%c",&input)){
-        if(input == '\n') break;
-        insert(a_input,input);
-        a_input = a_input->next;
-    }
-    print_list(division(a1,a2));
-    }
-}
-*/

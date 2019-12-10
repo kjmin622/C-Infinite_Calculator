@@ -13,7 +13,7 @@ LINK multiple(LINK num1, LINK num2){
     LINK input;
     LINK zero_link;
     LINK save;
-    int buho = 0;   // 0 -> '-'  1-> '+'
+    char buho = 0;   // 0 -> '-'  1-> '+'
 
     // 계산 값 부호 결정 
     //
@@ -21,7 +21,7 @@ LINK multiple(LINK num1, LINK num2){
  
     // 소수점 계산 
     //
-    int point = 0;
+    unsigned long long point = 0;
     num_copy = num1_last;
     for( ; num_copy->d != '.' ; num_copy = num_copy->prev) point++;//3 
     num_copy = num2_last;
@@ -39,11 +39,11 @@ LINK multiple(LINK num1, LINK num2){
     // num2->next->d* num1-> .. ...위에 계산 한 칸에 +
     // 
     mul1 = last_link(num1_int);
-    int zero = 0;
+    unsigned long long int zero = 0;
     for(; mul1 != NULL; mul1 = mul1->prev){
         mul2 = last_link(num2_int);
-        int now = (mul1->d-'0') * (mul2->d-'0'); 
-        int up = now/10;
+        char now = (mul1->d-'0') * (mul2->d-'0'); 
+        char up = now/10;
         now %=10;
 
         input = char_to_list(now + '0');
@@ -65,7 +65,7 @@ LINK multiple(LINK num1, LINK num2){
         //자릿수 추가//////////////////////////////////////////////
         if(zero>0){
             zero_link = char_to_list('0');
-            for(int i=1; i<zero; i++){
+            for(unsigned long long i=1; i<zero; i++){
                 insert(zero_link,'0');
             }
             concatenate(zero_link,input);
@@ -87,8 +87,8 @@ LINK multiple(LINK num1, LINK num2){
         if(!zero) ans = copy_link(input);
         
         else{
-            int alen = count(ans);
-            int blen = count(input);
+            unsigned long long alen = count(ans);
+            unsigned long long blen = count(input);
             if(blen>alen){
                 num_copy = ans;
                 ans = input;
@@ -122,7 +122,7 @@ LINK multiple(LINK num1, LINK num2){
     
     // 부호 추가하고 뒤집고 소수점 계산 한 값만큼 소수점 뒤에서부터 카운트
     //
-    int anslen = count(ans);
+    unsigned long long anslen = count(ans);
     if(anslen > point){
         num_copy = ans;
         save = ans;

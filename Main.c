@@ -86,10 +86,10 @@ int main(void){
     exp = exp_head;
 
     //중간부분 체크에 쓰일 변수 선언
-    int number = 1; // 숫자가 있으면 0
-    int spot = 0;
-    int left_bracket = 0; // 왼괄호
-    int right_bracket = 0; // 우괄
+    char number = 1; // 숫자가 있으면 0
+    char spot = 0;
+    unsigned long long left_bracket = 0; // 왼괄호
+    unsigned long long right_bracket = 0; // 우괄
 
     // 맨 앞에 나오면 안되는 게 있으면 에러 체크
     if(!(exp->d == '(' || exp->d == '-' || (exp->d >= '0' && exp->d <= '9'))) errorcheck = -1;
@@ -159,9 +159,10 @@ int main(void){
 
     //에러가 체크되어 있으면 오류문구 출력 후 종료
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
-    if(errorcheck == -1){
+    if(errorcheck){
         printf("어라.. 식이 이상한 거 같은데요?\n"); 
-        free_all(exp_head); 
+        free_all(exp_head);
+        printf("Elapsed Time: %lld\n",getElapsedTime(1));
         exit(1);
     }
 
@@ -180,7 +181,7 @@ int main(void){
 
     // 중간 수정 파트 //
     exp = exp_head;
-    int situration = 0;
+    char situration = 0;
     for(; exp!=NULL; exp=exp->next){
 
         //피연산자를 만났을 때
@@ -274,7 +275,14 @@ int main(void){
                 LINK oper = Pop(&oper_stack);
                 LINK p2 = Pop(&num_stack);
                 LINK p1 = Pop(&num_stack);
-                Push(&num_stack,calculator(p1,p2,oper->d));
+                LINK p3 = calculator(p1,p2,oper->d);
+                if(p3->d == 'e'){
+                    printf("0으로 나눌 수는 없습니다.\n");
+                    free_all(exp_head);
+                    printf("Elapsed Time: %lld\n",getElapsedTime(1));
+                    exit(2);
+                }
+                Push(&num_stack,p3);
                 free_all(oper);
             }
             free(Pop(&oper_stack));
@@ -289,7 +297,15 @@ int main(void){
                 LINK oper = Pop(&oper_stack);
                 LINK p2 = Pop(&num_stack);
                 LINK p1 = Pop(&num_stack);
-                Push(&num_stack,calculator(p1,p2,oper->d));
+                LINK p3 = calculator(p1,p2,oper->d);
+                if(p3->d == 'e'){
+                    printf("0으로 나눌 수는 없습니다.\n");
+                    free_all(exp_head);
+                    printf("Elapsed Time: %lld\n",getElapsedTime(1));
+                    exit(2);
+                }
+                Push(&num_stack,p3);
+
                 free_all(oper);
             }
             Push(&oper_stack,char_to_list(exp->d));
@@ -302,7 +318,14 @@ int main(void){
                 LINK oper = Pop(&oper_stack);
                 LINK p2 = Pop(&num_stack);
                 LINK p1 = Pop(&num_stack);
-                Push(&num_stack,calculator(p1,p2,oper->d));
+                LINK p3 = calculator(p1,p2,oper->d);
+                if(p3->d == 'e'){
+                    printf("0으로 나눌 수는 없습니다.\n");
+                    free_all(exp_head);
+                    printf("Elapsed Time: %lld\n",getElapsedTime(1));
+                    exit(2);
+                }
+                Push(&num_stack,p3);
                 free_all(oper);
             }
             Push(&oper_stack,char_to_list(exp->d));
@@ -316,7 +339,14 @@ int main(void){
         if(oper->d == '(') {free(oper); continue;}
         LINK p2 = Pop(&num_stack);
         LINK p1 = Pop(&num_stack);
-        Push(&num_stack,calculator(p1,p2,oper->d));
+        LINK p3 = calculator(p1,p2,oper->d);
+        if(p3->d == 'e'){
+            printf("0으로 나눌 수는 없습니다.\n");
+            free_all(exp_head);
+            printf("Elapsed Time: %lld\n",getElapsedTime(1));
+            exit(2);
+        }
+        Push(&num_stack,p3);
         free_all(oper);
     }
     

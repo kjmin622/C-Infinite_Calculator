@@ -7,11 +7,11 @@ LINK minus(LINK a, LINK b){
     LINK num_copy;
     LINK num1;
     LINK num2;
-    int buho;
-    int big_num;
-    int point_count = 0;
-    int now = 0;
-    int down = 0;
+    char buho; //부호 (+,- : 1,0)
+    char big_num; //비교값 (1,2,3)
+    unsigned long long int point_count = 0; //점의 위치(0~)
+    char now = 0; // 계산파트에서의 현재값
+    char down = 0; // 계산파트에서의 내림값
 
     /////////////////////////////////////////////////////////////
     //절대값이 큰 수가 a로 가도록 및 혹시 답이 0이니?
@@ -60,9 +60,9 @@ LINK minus(LINK a, LINK b){
     b = last_link(num2);
 
     while(a!=NULL){
-        int number1 = a->d-'0';
-        int number2 = b->d-'0';
-        int check = 0;
+        char number1 = a->d-'0';
+        char number2 = b->d-'0';
+        char check = 0;
         if(number2-down > number1) {number1 += 10; check = 1;};
         now = number1 - number2 + down;
         down = check ? -1 : 0;

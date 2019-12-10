@@ -15,7 +15,7 @@ typedef ELEMENT *LINK;
 //
 LINK char_to_list(char); // 헤드의 데이터가 char인 헤드 주소 반환
 //
-int count(LINK); // LINK의 길이 반환
+unsigned long long count(LINK); // LINK의 길이 반환
 //
 LINK last_link(LINK); // Linked list의 맨 마지막 주소 반환
 //
@@ -33,7 +33,7 @@ void del_link(LINK p); // p 삭제  *주의 : 헤드 삭제 불가능
 //
 LINK copy_link(LINK p2); // p2 복사해서 반환
 //
-int compare(LINK, LINK); // 두 수 비교,  1:a가 더 큼  2:b가 더 큼  3:같음
+char compare(LINK, LINK); // 두 수 비교,  1:a가 더 큼  2:b가 더 큼  3:같음
 //
 LINK Upzero_fill(LINK, LINK); // 작은 수의 앞자리에 0 채워서 큰 수와 자릿수 맞추기
 //
@@ -56,8 +56,8 @@ LINK char_to_list(char s){
     return head;
 }
 
-int count(LINK head){
-    int cnt = 0;
+unsigned long long count(LINK head){
+    unsigned long long cnt = 0;
     for( ; head != NULL; head = head->next) cnt++;
     return cnt;
 }
@@ -137,7 +137,7 @@ LINK copy_link(LINK p2){
     return p1;
 }
 
-int compare(LINK x, LINK y){
+char compare(LINK x, LINK y){
     LINK a = x->next;
     LINK b = y->next;
     while((a!=NULL && b!=NULL) && (a->d!='.' || b->d!='.')){
@@ -164,15 +164,15 @@ LINK Upzero_fill(LINK x, LINK y){
     LINK a = x;
     LINK b = y;
 
-    int alen, blen; alen=blen=0;
+    unsigned long long alen, blen; alen=blen=0;
     for(; a->d != '.'; a=a->next) alen++;
     for(; b->d != '.'; b=b->next) blen++;
 
     if(alen == blen) return y;
     
-    int len = alen - blen;
+    unsigned long long len = alen - blen;
     LINK zero = char_to_list('0');
-    for(int i=1; i<len; i++){
+    while(len-->0){
         insert(zero,'0');
     }
     concatenate(zero,y);

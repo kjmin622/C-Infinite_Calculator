@@ -7,18 +7,18 @@ LINK plus(LINK a, LINK b){
     LINK num_copy;
     LINK num1;
     LINK num2;
-    int buho;
-    int big_num;
-    int point_count = 0;
-    int now = 0;
-    int up = 0;
+    char buho;
+    char big_num;
+    unsigned long long point_count = 0;
+    char now = 0;
+    char up = 0;
 
     /////////////////////////////////////////////////////////////
     //큰게 앞으로
-    if(compare(a,b)==2){
-        LINK tmp = b;
-        b = a;
-        a = tmp;
+    if(compare(a,b) == 2){
+        LINK tmp = a;
+        a = b;
+        b = tmp;
     }
     /////////////////////////////////////////////////////////////
     //부호는 a의 부호를 따라가도록
@@ -50,14 +50,15 @@ LINK plus(LINK a, LINK b){
     for(; b->d != '.'; b=b->next); del_link(b);
 
 
+   
     ///////////////////////////////////////////////////////////
     //계산
     a = last_link(num1);
     b = last_link(num2);
 
     while(a!=NULL){
-        int number1 = a->d-'0';
-        int number2 = b->d-'0';
+        char number1 = a->d-'0';
+        char number2 = b->d-'0';
 
         now = number1 + number2 + up;
         
