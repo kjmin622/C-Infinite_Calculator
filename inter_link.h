@@ -87,7 +87,7 @@ void print_answer(LINK head){
         if(head->d == '.' && head->next == NULL) break;
         printf("%c",head->d);
     }
-    printf("\n\n");
+    printf("\n");
 }
 
 void concatenate(LINK a, LINK b){
