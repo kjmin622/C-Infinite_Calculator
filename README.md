@@ -13,5 +13,5 @@
 * 프로그램 실행      ex)  ./inf_calc
 
 ## inf.calc가 실행이 안돼요
-* 첫 번째 방법 : gcc -o inf.calc Main.c
+* 첫 번째 방법 : gcc -o inf_calc Main.c
 * 두 번째 방법 : chmod +x inf.calc
