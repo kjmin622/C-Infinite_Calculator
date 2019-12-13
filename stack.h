@@ -38,3 +38,4 @@ LINK Pop(Stack *stack){
 LINK Top(Stack *stack){
     return stack->top->data;
 }
+

@@ -68,7 +68,7 @@ LINK last_link(LINK head){
 }
 
 void print_list(LINK head){
-    if(head == NULL) printf(" NULL\n");
+    if(head == NULL);
     else {printf("%c", head->d); print_list(head->next);}
 }
 
@@ -87,7 +87,6 @@ void print_answer(LINK head){
         if(head->d == '.' && head->next == NULL) break;
         printf("%c",head->d);
     }
-    printf("\n");
 }
 
 void concatenate(LINK a, LINK b){

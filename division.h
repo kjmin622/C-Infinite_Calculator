@@ -12,14 +12,14 @@ LINK division(LINK a, LINK b){  // a//b
     LINK num3;
     LINK num0;
     LINK answer;
-    
-    
-    //b가 0인지 확인////////////////////////////////////////////
-    if(b->next->d=='0' && b->next->next->d=='.') {
+   
+    //b가 0일 때////////////////////////////////////////////////
+    if(b->next->d == '0' && b->next->next->d == '.' && b->next->next->next==NULL){
+        printf("error : "); print_answer(a); printf("/"); print_answer(b); printf("\n");
         free_all(a); free_all(b);
-        return char_to_list('e');  //b가 0이면 에러 반환
+        return char_to_list('e');
     }
-
+    
     //a보다 b가 더 큰지 확인////////////////////////////////////
     comp = compare(a,b);
     if(comp == 2){
@@ -45,6 +45,18 @@ LINK division(LINK a, LINK b){  // a//b
     a=num1; for(; a->d != '.'; a=a->next); del_link(a);
     a=num2; for(; a->d != '.'; a=a->next); del_link(a);
 
+    //앞 0 제거////////////////////////////////////////////////
+    while(num1->next != NULL && num1->d == '0'){
+        b = num1->next;
+        free(num1);
+        num1 = b;
+    }
+    
+    while(num2->next != NULL && num2->d == '0'){
+        b = num2->next;
+        free(num2);
+        num2 = b;
+    }
 
     //num0 생성////////////////////////////////////////////////
     //

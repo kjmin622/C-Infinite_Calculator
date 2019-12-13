@@ -160,7 +160,7 @@ int main(void){
     //에러가 체크되어 있으면 오류문구 출력 후 종료
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
     if(errorcheck){
-        printf("어라.. 식이 이상한 거 같은데요?\n"); 
+        printf("Problem on Input\n"); 
         free_all(exp_head);
         printf("Elapsed Time: %lld\n",getElapsedTime(1));
         exit(1);
@@ -354,6 +354,7 @@ int main(void){
     printf("Result : ");
     LINK answer = Pop(&num_stack);
     print_answer(answer);
+    printf("\n");
     ////////////////////////////////////////////////
     //메모리 해제
     
