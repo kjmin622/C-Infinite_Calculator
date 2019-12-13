@@ -33,6 +33,11 @@ int main(void){
     ///////////////////////////////////////////////
     //입력부
     FILE *fq = fopen("input","r"); 
+    if(fq == NULL){
+        printf("input 파일이 없습니다.\n");
+        exit(0);
+    }
+
     printf("Input : ");
     //input에 입력을 받고 리스트에 넣는다.
     char input = getc(fq);
