@@ -8,7 +8,6 @@ LINK plus(LINK a, LINK b){
     LINK num1;
     LINK num2;
     char buho;
-    char big_num;
     unsigned long long point_count = 0;
     char now = 0;
     char up = 0;
