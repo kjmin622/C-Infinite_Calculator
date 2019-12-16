@@ -13,11 +13,16 @@ LINK input_exp(){
         exit(0);
     }
 
-    printf("Input : ");
     //input에 입력을 받고 리스트에 넣는다.
     char input = getc(fq);
-    printf("%c",input);
 
+    if(input=='\n'){
+        printf("input 파일이 비어있습니다.\n");
+        exit(0);
+    }
+
+    printf("input : ");
+    printf("%c",input);
     //식 링크드리스트 생성
     LINK exp_head = char_to_list(input);
     LINK exp = exp_head;
