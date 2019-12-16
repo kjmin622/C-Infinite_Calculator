@@ -113,7 +113,7 @@ char exp_error(LINK exp_head){
         }
 
         if(exp->d == '('){
-            if(!(exp->next->d == '(' || exp->next->d == ')' || exp->next->d == '-' || 
+            if(!(exp->next->d == '('|| exp->next->d == '-' || 
                         (exp->next->d>='0' && exp->next->d<='9'))) {errorcheck = -1; break;}
         }
         if(exp->d == ')'){
