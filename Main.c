@@ -33,7 +33,16 @@ int main(void){
     //에러가 체크되어 있으면 오류문구 출력 후 종료
     char errorcheck = exp_error(exp_head);    
     if(errorcheck){
-        printf("Problem on Input\n"); 
+        printf("입력에 오류가 있습니다. 아래를 확인해주세요.\n");
+        printf("\t1. 맨 앞 또는 ( 뒤에는 숫자, -, ( 만 올 수 있습니다.\n");
+        printf("\t2. 숫자가 존재해야 합니다.\n");
+        printf("\t3. 제대로 된 정수 또는 실수를 입력해야 합니다.\n");
+        printf("\t4. 좌 우 각각의 괄호 개수가 같아야 합니다.\n");
+        printf("\t5. 이상한 문자를 입력하면 안됩니다.\n");
+        printf("\t6. 괄호 안이 비어있으면 안됩니다.\n");
+        printf("\t7. 우괄호는 함께 쓰이는 좌괄호가 있어야 나올 수 있습니다.\n");
+        printf("\t8. 마지막 글자에는 숫자, ) 만 올 수 있습니다. 등등..\n\n");
+         
         free_all(exp_head);
         printf("Elapsed Time: %lld\n",getElapsedTime(1));
         exit(1);

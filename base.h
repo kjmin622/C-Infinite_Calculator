@@ -17,7 +17,7 @@ LINK input_exp(){
     char input = getc(fq);
 
     if(input=='\n'){
-        printf("input 파일이 비어있습니다.\n");
+        printf("input 파일이 비어있거나, 개행문자로 시작합니다.\n");
         exit(0);
     }
 
