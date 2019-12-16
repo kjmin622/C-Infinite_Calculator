@@ -28,7 +28,7 @@ int main(void){
     //오류 제거
     //
     //식의 앞에 있는 공백 제거
-    LINK exp_head = del_space(exp_head);
+    exp_head = del_space(exp_head);
 
     //에러가 체크되어 있으면 오류문구 출력 후 종료
     char errorcheck = exp_error(exp_head);    
@@ -41,7 +41,7 @@ int main(void){
 
     ////////////////////////////////////////////////
     //수정부
-    LINK exp_head = exp_change(exp_head);
+    exp_head = exp_change(exp_head);
     
     ////////////////////////////////////////////////
 
@@ -49,7 +49,7 @@ int main(void){
     //계산부
     LINK answer = exp_answer(exp_head);
 
-    if(p3->d == 'e'){
+    if(answer->d == 'e'){
         printf("0으로 나눌 수는 없습니다.\n");
         free_all(exp_head);
         printf("Elapsed Time: %lld\n",getElapsedTime(1));
