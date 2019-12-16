@@ -39,3 +39,12 @@ LINK Top(Stack *stack){
     return stack->top->data;
 }
 
+void stack_reset(Stack *stack){
+    Node *now = stack->top;
+    while(now != NULL){
+        Node *next = now->next;
+        free(now);
+        now = next;
+    }
+}
+

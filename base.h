@@ -254,6 +254,8 @@ LINK exp_answer(LINK exp_head){
                 LINK p1 = Pop(&num_stack);
                 LINK p3 = calculator(p1,p2,oper->d);
                 if(p3->d == 'e'){
+                    stack_reset(&num_stack);
+                    stack_reset(&oper_stack);
                    return p3;
                 }
                 Push(&num_stack,p3);
@@ -273,6 +275,8 @@ LINK exp_answer(LINK exp_head){
                 LINK p1 = Pop(&num_stack);
                 LINK p3 = calculator(p1,p2,oper->d);
                 if(p3->d == 'e'){
+                    stack_reset(&num_stack);
+                    stack_reset(&oper_stack);
                     return p3;
                 }
                 Push(&num_stack,p3);
@@ -291,6 +295,8 @@ LINK exp_answer(LINK exp_head){
                 LINK p1 = Pop(&num_stack);
                 LINK p3 = calculator(p1,p2,oper->d);
                 if(p3->d == 'e'){
+                    stack_reset(&num_stack);
+                    stack_reset(&oper_stack);
                     return p3;
                 }
                 Push(&num_stack,p3);
@@ -310,6 +316,8 @@ LINK exp_answer(LINK exp_head){
         LINK p3 = calculator(p1,p2,oper->d);
         Push(&num_stack,p3);
         if(p3->d == 'e'){
+            stack_reset(&num_stack);
+            stack_reset(&oper_stack);
             return p3;
         }
     }
